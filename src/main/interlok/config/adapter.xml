@@ -1,5 +1,5 @@
 <adapter>
-  <unique-id>jetty-json-csv</unique-id>
+  <unique-id>desperate-blackwell</unique-id>
   <start-up-event-imp>com.adaptris.core.event.StandardAdapterStartUpEvent</start-up-event-imp>
   <heartbeat-event-imp>com.adaptris.core.HeartbeatEvent</heartbeat-event-imp>
   <shared-components>
@@ -9,73 +9,111 @@
   <event-handler class="default-event-handler">
     <unique-id>DefaultEventHandler</unique-id>
     <connection class="null-connection">
-      <unique-id>agitated-einstein</unique-id>
+      <unique-id>tiny-kowalevski</unique-id>
     </connection>
     <producer class="null-message-producer">
-      <unique-id>romantic-bartik</unique-id>
+      <unique-id>condescending-spence</unique-id>
     </producer>
   </event-handler>
   <message-error-handler class="null-processing-exception-handler">
-    <unique-id>silly-dijkstra</unique-id>
+    <unique-id>sad-snyder</unique-id>
   </message-error-handler>
   <failed-message-retrier class="no-retries">
-    <unique-id>jolly-ptolemy</unique-id>
+    <unique-id>pedantic-shannon</unique-id>
   </failed-message-retrier>
   <channel-list>
     <channel>
-      <consume-connection class="jetty-embedded-connection">
-        <unique-id>jetty</unique-id>
+      <consume-connection class="mqtt-connection">
+        <connection-error-handler class="null-connection-error-handler"/>
+        <unique-id>furious-pike</unique-id>
+        <server-uri>tcp://192.168.1.133:1883</server-uri>
+        <username>sonicmq</username>
+        <password>Jm0nkey123</password>
+        <protocol-version>DEFAULT</protocol-version>
+        <clean-session>true</clean-session>
+        <connection-timeout>
+          <unit>SECONDS</unit>
+          <interval>30</interval>
+        </connection-timeout>
+        <ssl-properties/>
       </consume-connection>
       <produce-connection class="null-connection">
-        <unique-id>focused-hoover</unique-id>
+        <unique-id>prickly-bhaskara</unique-id>
       </produce-connection>
       <workflow-list>
         <standard-workflow>
-          <consumer class="jetty-message-consumer">
-            <unique-id>csv-receive</unique-id>
-            <path>/api/csv</path>
-            <parameter-handler class="jetty-http-ignore-parameters"/>
-            <header-handler class="jetty-http-headers-as-metadata"/>
+          <consumer class="mqtt-consumer">
+            <unique-id>zen-goldberg</unique-id>
+            <topic>frigate/reviews</topic>
           </consumer>
           <service-collection class="service-list">
-            <unique-id>high-shirley</unique-id>
+            <unique-id>cocky-clarke</unique-id>
             <services>
-              <add-metadata-service>
-                <unique-id>add-build-metadata</unique-id>
-                <metadata-element>
-                  <key>X-Interlok-Release</key>
-                  <value>${interlok.core.version}</value>
-                </metadata-element>
-                <metadata-element>
-                  <key>X-Interlok-Build</key>
-                  <value>${build.version}</value>
-                </metadata-element>
-              </add-metadata-service>
-              <json-to-csv>
-                <unique-id>json-array-to-csv</unique-id>
-                <preference-builder class="csv-basic-preference-builder">
-                  <style>STANDARD_PREFERENCE</style>
-                </preference-builder>
-              </json-to-csv>
-              <jetty-response-service>
-                <unique-id>send-response</unique-id>
-                <http-status>200</http-status>
-                <content-type>text/plain</content-type>
-                <response-header-provider class="jetty-metadata-response-headers">
-                  <filter class="regex-metadata-filter">
-                    <include-pattern>^X-Interlok.*$</include-pattern>
-                  </filter>
-                </response-header-provider>
-              </jetty-response-service>
+              <log-message-service>
+                <unique-id>sad-torvalds</unique-id>
+                <log-level>INFO</log-level>
+              </log-message-service>
+              <json-transform-service>
+                <unique-id>sharp-yonath</unique-id>
+                <source-json class="string-payload-data-input-parameter"/>
+                <mapping-spec class="file-data-input-parameter">
+                  <url>file://localhost/./config/frigate-review-jolt.json</url>
+                </mapping-spec>
+                <target-json class="string-payload-data-output-parameter"/>
+                <metadata-filter class="remove-all-metadata-filter"/>
+              </json-transform-service>
+              <json-to-metadata>
+                <unique-id>ecstatic-bell</unique-id>
+                <metadata-prefix>document</metadata-prefix>
+              </json-to-metadata>
+              <if-then-otherwise>
+                <unique-id>distracted-austin</unique-id>
+                <condition class="and">
+                  <metadata>
+                    <operator class="equals">
+                      <value>update</value>
+                    </operator>
+                    <metadata-key>documenttype</metadata-key>
+                  </metadata>
+                  <metadata>
+                    <operator class="equals">
+                      <value>alert</value>
+                    </operator>
+                    <metadata-key>documentseverity</metadata-key>
+                  </metadata>
+                </condition>
+                <then>
+                  <service class="service-list">
+                    <unique-id>pensive-goldstine</unique-id>
+                    <services>
+                      <payload-from-template>
+                        <unique-id>reverent-meninsky</unique-id>
+                        <metadata-tokens/>
+                        <template><![CDATA[Detected %message{documentobjects} in driveway]]></template>
+                      </payload-from-template>
+                      <apache-http-request-service>
+                        <unique-id>prickly-leakey</unique-id>
+                        <url>http://192.168.1.107:80/home</url>
+                        <method>POST</method>
+                        <authenticator class="http-no-authentication"/>
+                      </apache-http-request-service>
+                    </services>
+                  </service>
+                </then>
+                <otherwise>
+                  <service class="stop-processing-service">
+                    <unique-id>agitated-carson</unique-id>
+                  </service>
+                </otherwise>
+              </if-then-otherwise>
             </services>
           </service-collection>
           <producer class="null-message-producer">
-            <unique-id>clever-swanson</unique-id>
+            <unique-id>adoring-kowalevski</unique-id>
           </producer>
-          <produce-exception-handler class="null-produce-exception-handler"/>
-          <unique-id>receive-json-return-csv</unique-id>
+          <unique-id>mqtt-rest-api-bridge-workflow</unique-id>
           <message-metrics-interceptor>
-            <unique-id>receive-json-return-csv-MessageMetrics</unique-id>
+            <unique-id>mqtt-rest-api-bridge-workflow-MessageMetrics</unique-id>
             <timeslice-duration>
               <unit>MINUTES</unit>
               <interval>5</interval>
@@ -83,30 +121,67 @@
             <timeslice-history-count>12</timeslice-history-count>
           </message-metrics-interceptor>
           <in-flight-workflow-interceptor>
-            <unique-id>receive-json-return-csv-InFlight</unique-id>
+            <unique-id>mqtt-rest-api-bridge-workflow-InFlight</unique-id>
           </in-flight-workflow-interceptor>
         </standard-workflow>
+        <standard-workflow>
+          <consumer class="mqtt-consumer">
+            <unique-id>event-consumer</unique-id>
+            <topic>frigate/events</topic>
+          </consumer>
+          <service-collection class="service-list">
+            <unique-id>happy-noyce</unique-id>
+            <services>
+              <json-transform-service>
+                <unique-id>event jolt</unique-id>
+                <source-json class="string-payload-data-input-parameter"/>
+                <mapping-spec class="file-data-input-parameter">
+                  <url>file://localhost/./config/frigate-event-jolt.json</url>
+                </mapping-spec>
+                <target-json class="string-payload-data-output-parameter"/>
+                <metadata-filter class="remove-all-metadata-filter"/>
+              </json-transform-service>
+              <json-to-metadata>
+                <unique-id>ecstatic-bell</unique-id>
+                <metadata-prefix>document</metadata-prefix>
+              </json-to-metadata>
+              <if-then-otherwise>
+                <unique-id>hopeful-fermi</unique-id>
+                <condition class="and">
+                  <metadata>
+                    <operator class="equals">
+                      <value>new</value>
+                    </operator>
+                    <metadata-key>documenttype</metadata-key>
+                  </metadata>
+                  <metadata>
+                    <operator class="equals">
+                      <value>driveway</value>
+                    </operator>
+                    <metadata-key>documentcamera</metadata-key>
+                  </metadata>
+                </condition>
+                <then>
+                  <service class="log-message-service">
+                    <unique-id>small-albattani</unique-id>
+                    <log-level>INFO</log-level>
+                  </service>
+                </then>
+                <otherwise>
+                  <service class="stop-processing-service">
+                    <unique-id>gloomy-fermi</unique-id>
+                  </service>
+                </otherwise>
+              </if-then-otherwise>
+            </services>
+          </service-collection>
+          <producer class="null-message-producer">
+            <unique-id>jolly-blackwell</unique-id>
+          </producer>
+          <unique-id>Mqtt events logging</unique-id>
+        </standard-workflow>
       </workflow-list>
-      <message-error-handler class="standard-processing-exception-handler">
-        <unique-id>error-handler</unique-id>
-        <processing-exception-service class="service-list">
-          <unique-id>send-error-response</unique-id>
-          <services>
-            <exception-report-service>
-              <unique-id>generate-exception-msg</unique-id>
-              <exception-serializer class="exception-as-json"/>
-            </exception-report-service>
-            <jetty-response-service>
-              <unique-id>send-500</unique-id>
-              <http-status>500</http-status>
-              <content-type>application/json</content-type>
-              <response-header-provider class="jetty-no-response-headers"/>
-            </jetty-response-service>
-          </services>
-        </processing-exception-service>
-      </message-error-handler>
-      <unique-id>JSON-CSV</unique-id>
-      <auto-start>${jetty.channel.autostart}</auto-start>
+      <unique-id>mqtt-channel</unique-id>
     </channel>
   </channel-list>
   <message-error-digester class="standard-message-error-digester">

@@ -1,0 +1,22 @@
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "type": "type",
+      "before": {
+        "camera": "camera",
+        "severity": "severity",
+        "data": {
+          "objects": "objects"
+        }
+      }
+    }
+  },
+  {
+    "operation": "modify-overwrite-beta",
+    "spec": {
+      "objects": "=join(' and ',@(1,objects))"
+    }
+  }
+]
+

@@ -1,0 +1,18 @@
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "type": "type",
+      "before": {
+        "id": "id",
+        "camera": "camera",
+        "label": "label",
+        "false_positive": "false_positive",
+        "current_zones": "current_zones",
+        "entered_zones": "entered_zones",
+        "stationary": "stationary"
+      }
+    }
+  }
+]
+

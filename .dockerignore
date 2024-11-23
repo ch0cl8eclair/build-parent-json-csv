@@ -4,3 +4,5 @@
 .gradle
 README.md
 LICENSE
+!gradlew
+!gradle

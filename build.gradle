@@ -1,10 +1,30 @@
+
+buildscript {
+  repositories {
+    maven {
+      url = uri("https://plugins.gradle.org/m2/")
+	metadataSources {
+		mavenPom()
+		ignoreGradleMetadataRedirection()
+    	}
+    }
+    mavenCentral()
+  }
+      configurations.all {
+        resolutionStrategy {
+            force 'org.ajoberstar.grgit:grgit-core:4.1.1'
+        }
+    }
+}
+
 plugins {
   // https://github.com/nemerosa/versioning
   id 'net.nemerosa.versioning' version '2.14.0'
 }
 
 ext {
-  interlokParentGradle = "https://raw.githubusercontent.com/adaptris/interlok-build-parent/main/v5/build.gradle"
+  //interlokParentGradle = "https://raw.githubusercontent.com/adaptris/interlok-build-parent/main/v5/build.gradle"
+  interlokParentGradle = "parentBuild.gradle"
   // Include the WAR file since by default it is excluded.
   includeWar='true'
 }
@@ -21,6 +41,7 @@ dependencies {
   interlokRuntime ("com.adaptris:interlok-csv:$interlokVersion") { changing=true }
   interlokRuntime ("com.adaptris:interlok-csv-json:$interlokVersion") { changing=true }
   interlokRuntime ("com.adaptris:interlok-apache-http:$interlokVersion") { changing=true }
+  interlokRuntime ("com.adaptris:interlok-mqtt:$interlokVersion") { changing=true }
 
   interlokJavadocs group: "com.adaptris", name: "interlok-apache-http", version: "$interlokVersion", classifier: "javadoc", changing: true, transitive: false
   interlokJavadocs group: "com.adaptris", name: "interlok-json", version: "$interlokVersion", classifier: "javadoc", changing: true, transitive: false
