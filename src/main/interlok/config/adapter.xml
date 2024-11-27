@@ -3,8 +3,24 @@
   <start-up-event-imp>com.adaptris.core.event.StandardAdapterStartUpEvent</start-up-event-imp>
   <heartbeat-event-imp>com.adaptris.core.HeartbeatEvent</heartbeat-event-imp>
   <shared-components>
-    <connections/>
-    <services/>
+    <connections>
+      <cache-connection>
+        <unique-id>document id cache</unique-id>
+        <cache-instance class="expiring-map-cache">
+          <expiration>
+            <unit>HOURS</unit>
+            <interval>1</interval>
+          </expiration>
+          <expiration-policy>ACCESSED</expiration-policy>
+          <event-listener/>
+        </cache-instance>
+      </cache-connection>
+    </connections>
+    <services>
+      <stop-processing-service>
+        <unique-id>stop service</unique-id>
+      </stop-processing-service>
+    </services>
   </shared-components>
   <event-handler class="default-event-handler">
     <unique-id>DefaultEventHandler</unique-id>
@@ -66,26 +82,42 @@
                 <unique-id>ecstatic-bell</unique-id>
                 <metadata-prefix>document</metadata-prefix>
               </json-to-metadata>
+              <check-cache>
+                <unique-id>admiring-mahavira</unique-id>
+                <connection class="shared-connection">
+                  <lookup-name>document id cache</lookup-name>
+                </connection>
+                <cache-entry-evaluator>
+                  <key-translator class="metadata-cache-value-translator">
+                    <metadata-key>documentid</metadata-key>
+                  </key-translator>
+                  <value-translator class="com.adaptris.core.services.cache.CacheEntryEvaluator$NullCacheValueTranslator"/>
+                </cache-entry-evaluator>
+                <keys-not-found-service-id>review filter service</keys-not-found-service-id>
+                <keys-found-service-id>stop service</keys-found-service-id>
+              </check-cache>
               <if-then-otherwise>
-                <unique-id>distracted-austin</unique-id>
-                <condition class="and">
-                  <metadata>
-                    <operator class="equals">
-                      <value>update</value>
-                    </operator>
-                    <metadata-key>documenttype</metadata-key>
-                  </metadata>
-                  <metadata>
-                    <operator class="equals">
-                      <value>alert</value>
-                    </operator>
-                    <metadata-key>documentseverity</metadata-key>
-                  </metadata>
+                <unique-id>review filter service</unique-id>
+                <condition class="metadata">
+                  <operator class="equals">
+                    <value>alert</value>
+                  </operator>
+                  <metadata-key>documentseverity</metadata-key>
                 </condition>
                 <then>
                   <service class="service-list">
                     <unique-id>pensive-goldstine</unique-id>
                     <services>
+                      <add-single-value-to-cache>
+                        <unique-id>save review event id</unique-id>
+                        <connection class="shared-connection">
+                          <lookup-name>document id cache</lookup-name>
+                        </connection>
+                        <key>%message{documentid}</key>
+                        <value-translator class="metadata-cache-value-translator">
+                          <metadata-key>documentid</metadata-key>
+                        </value-translator>
+                      </add-single-value-to-cache>
                       <payload-from-template>
                         <unique-id>reverent-meninsky</unique-id>
                         <metadata-tokens/>
@@ -95,6 +127,14 @@
                         <unique-id>prickly-leakey</unique-id>
                         <url>http://192.168.1.107:80/home</url>
                         <method>POST</method>
+                        <request-header-provider class="apache-http-configured-request-headers">
+                          <headers>
+                            <key-value-pair>
+                              <key>Attach</key>
+                              <value>http://frigate:5000/api/driveway/any/thumbnail.jpg</value>
+                            </key-value-pair>
+                          </headers>
+                        </request-header-provider>
                         <authenticator class="http-no-authentication"/>
                       </apache-http-request-service>
                     </services>
@@ -179,6 +219,17 @@
             <unique-id>jolly-blackwell</unique-id>
           </producer>
           <unique-id>Mqtt events logging</unique-id>
+          <message-metrics-interceptor>
+            <unique-id>Mqtt events logging-MessageMetrics</unique-id>
+            <timeslice-duration>
+              <unit>MINUTES</unit>
+              <interval>5</interval>
+            </timeslice-duration>
+            <timeslice-history-count>12</timeslice-history-count>
+          </message-metrics-interceptor>
+          <in-flight-workflow-interceptor>
+            <unique-id>Mqtt events logging-InFlight</unique-id>
+          </in-flight-workflow-interceptor>
         </standard-workflow>
       </workflow-list>
       <unique-id>mqtt-channel</unique-id>

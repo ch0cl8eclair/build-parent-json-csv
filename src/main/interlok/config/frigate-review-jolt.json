@@ -4,6 +4,7 @@
     "spec": {
       "type": "type",
       "before": {
+        "id": "id",
         "camera": "camera",
         "severity": "severity",
         "data": {
